@@ -47,13 +47,35 @@ public class Main {
                                 rangoEdad, sexo, codLesividad, lesividad,
                                 coordenadaX, coordenadaY, positivaAlcohol, positivaDroga);
                     })
-                    .collect(Collectors.toList());
+                    .toList();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // 🔎 Imprimir los 100 primeros accidentes
-        accidentes.stream().limit(100).forEach(System.out::println);
+        // Accidentes en los que están implicados alcohol o drogas.
+        System.out.println();
+        System.out.println("Accidentes en los que están implicados alcohol o drogas");
+        List<Accidente>accidentesDrogas = accidentes.stream()
+                .filter(accidente -> accidente.positivaAlcohol().equals("S") || accidente.positivaDroga().equals("1"))
+                .toList();
+        accidentesDrogas.forEach(System.out::println);
+        System.out.println("Cantidad de accidentes con alcohol o drogas : " + accidentesDrogas.size());
+
+        // Número de accidentes agrupados por sexos.
+        System.out.println();
+        System.out.println("Accidentes agrupados por sexos");
+        long accidentesHombres = accidentes.stream()
+                .filter(accidente -> accidente.sexo().equals("Hombre"))
+                .count();
+        long accidentesMujeres = accidentes.stream()
+                .filter(accidente -> accidente.sexo().equals("Mujer"))
+                .count();
+        long accidentesSexoDesconocido = accidentes.stream()
+                .filter(accidente -> accidente.sexo().equals("Desconocido"))
+                .count();
+
+        System.out.println("Hombres: " + accidentesHombres + "\tMujeres: " + accidentesMujeres + "\tDesconocido: " + accidentesSexoDesconocido);
+
     }
 }
