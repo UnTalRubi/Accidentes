@@ -5,8 +5,10 @@ import edu.teis.model.Accidente;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,6 +64,7 @@ public class Main {
         accidentesDrogas.forEach(System.out::println);
         System.out.println("Cantidad de accidentes con alcohol o drogas : " + accidentesDrogas.size());
 
+
         // Número de accidentes agrupados por sexos.
         System.out.println();
         System.out.println("Accidentes agrupados por sexos");
@@ -77,5 +80,17 @@ public class Main {
 
         System.out.println("Hombres: " + accidentesHombres + "\tMujeres: " + accidentesMujeres + "\tDesconocido: " + accidentesSexoDesconocido);
 
+
+        // Número de accidentes agrupados por meses.
+        System.out.println();
+        System.out.println("Accidentes agrupados por meses");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Map<Month, Long> accidentesPorMes = accidentes.stream()
+                .collect(Collectors
+                        .groupingBy(accidente -> LocalDate.parse(accidente.fecha(), formatter).getMonth()
+                                ,() -> new TreeMap<Month, Long>(Comparator.naturalOrder())
+                                ,Collectors.counting()));
+        accidentesPorMes.forEach((mes, total) ->
+                System.out.println(mes + ": " + total + " accidentes"));
     }
 }
