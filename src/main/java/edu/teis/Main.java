@@ -62,6 +62,7 @@ public class Main {
                 .filter(accidente -> accidente.positivaAlcohol().equals("S") || accidente.positivaDroga().equals("1"))
                 .toList();
         accidentesDrogas.forEach(System.out::println);
+
         System.out.println("Cantidad de accidentes con alcohol o drogas : " + accidentesDrogas.size());
 
 
@@ -90,7 +91,19 @@ public class Main {
                         .groupingBy(accidente -> LocalDate.parse(accidente.fecha(), formatter).getMonth()
                                 ,() -> new TreeMap<Month, Long>(Comparator.naturalOrder())
                                 ,Collectors.counting()));
+
         accidentesPorMes.forEach((mes, total) ->
                 System.out.println(mes + ": " + total + " accidentes"));
+
+
+        // Accidentes donde haya habido atropellos a personas.
+        System.out.println();
+        System.out.println("Accidentes donde haya habido atropellos a personas");
+        List<Accidente>accidentesAtropellos = accidentes.stream()
+                .filter(accidente -> accidente.tipoAccidente().equals("Atropello a persona"))
+                .toList();
+        accidentesAtropellos.forEach(System.out::println);
+
+        System.out.println("Cantidad de accidentes con atropellos: " + accidentesAtropellos.size());
     }
 }
